@@ -7,8 +7,9 @@ import 'package:teamevideai/models/busStop_models.dart';
 
 class StopCard extends StatelessWidget {
   final BusStop stop;
+  final int index; // For staggered animation
 
-  const StopCard({Key? key, required this.stop}) : super(key: key);
+  const StopCard({Key? key, required this.stop, this.index = 0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +20,11 @@ class StopCard extends StatelessWidget {
       final favoritesController = Get.find<FavoritesController>();
       final isFav = favoritesController.isFavorite(stop.stopname);
 
-      return Container(
+      return AnimatedContainer(
+        duration: Duration(milliseconds: 500 + (index * 100)), // Staggered animation
+        curve: Curves.easeOutCubic,
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        transform: Matrix4.translationValues(0, 0, 0),
         child: Material(
           color: colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
@@ -41,7 +45,7 @@ class StopCard extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Location Icon
+                  // Location Icon with subtle pulse animation
                   _buildLocationIcon(theme),
                   SizedBox(width: 16),
 
@@ -59,7 +63,7 @@ class StopCard extends StatelessWidget {
                     ),
                   ),
 
-                  // Favorite Button
+                  // Favorite Button with enhanced animation
                   _buildFavoriteButton(favoritesController, stop, isFav, theme),
                 ],
               ),
@@ -71,72 +75,85 @@ class StopCard extends StatelessWidget {
   }
 
   Widget _buildLocationIcon(ThemeData theme) {
-    return Container(
-      width: 44,
-      height: 44,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            theme.colorScheme.primary,
-            theme.colorScheme.primaryContainer,
-          ],
+    return TweenAnimationBuilder(
+      tween: Tween<double>(begin: 0.9, end: 1.0),
+      duration: Duration(milliseconds: 800),
+      curve: Curves.easeOutBack,
+      builder: (context, double scale, child) {
+        return Transform.scale(
+          scale: scale,
+          child: child,
+        );
+      },
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              theme.colorScheme.primary,
+              theme.colorScheme.primaryContainer,
+            ],
+          ),
+          shape: BoxShape.circle,
         ),
-        shape: BoxShape.circle,
-      ),
-      child: Icon(
-        Icons.directions_bus_outlined,
-        color: Colors.white,
-        size: 24,
+        child: Icon(
+          Icons.directions_bus_outlined,
+          color: Colors.white,
+          size: 24,
+        ),
       ),
     );
   }
 
   Widget _buildStopName(String name, ThemeData theme) {
-    return Text(
-      name,
-      style: theme.textTheme.titleMedium?.copyWith(
-        fontWeight: FontWeight.w700,
-        color: theme.colorScheme.onSurface,
+    return TweenAnimationBuilder(
+      tween: Tween<double>(begin: 0.0, end: 1.0),
+      duration: Duration(milliseconds: 600),
+      builder: (context, double value, child) {
+        return Opacity(
+          opacity: value,
+          child: Transform.translate(
+            offset: Offset(0, (1 - value) * 10),
+            child: child,
+          ),
+        );
+      },
+      child: Text(
+        name,
+        style: theme.textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.w700,
+          color: theme.colorScheme.onSurface,
+        ),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
       ),
-      maxLines: 2,
-      overflow: TextOverflow.ellipsis,
     );
   }
 
   Widget _buildCoordinates(BusStop stop, ThemeData theme) {
-    return Row(
-      children: [
-        Icon(Icons.explore_rounded, size: 14, color: Colors.grey[600]),
-        SizedBox(width: 4),
-        Text(
-          '${stop.latitude.toStringAsFixed(4)}, ${stop.longitude.toStringAsFixed(4)}',
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: Colors.grey[600],
+    return TweenAnimationBuilder(
+      tween: Tween<double>(begin: 0.0, end: 1.0),
+      duration: Duration(milliseconds: 700),
+      builder: (context, double value, child) {
+        return Opacity(
+          opacity: value,
+          child: Transform.translate(
+            offset: Offset(0, (1 - value) * 5),
+            child: child,
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildETAInfo(BusStop stop, ThemeData theme) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.primary.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-      ),
+        );
+      },
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.access_time_rounded, size: 14, color: theme.colorScheme.primary),
+          Icon(Icons.explore_rounded, size: 14, color: Colors.grey[600]),
           SizedBox(width: 4),
           Text(
-            'ETA: ${_calculateETA(stop)} min',
+            '${stop.latitude.toStringAsFixed(4)}, ${stop.longitude.toStringAsFixed(4)}',
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.primary,
-              fontWeight: FontWeight.w600,
+              color: Colors.grey[600],
             ),
           ),
         ],
@@ -144,23 +161,76 @@ class StopCard extends StatelessWidget {
     );
   }
 
+  Widget _buildETAInfo(BusStop stop, ThemeData theme) {
+    return TweenAnimationBuilder(
+      tween: Tween<double>(begin: 0.0, end: 1.0),
+      duration: Duration(milliseconds: 800),
+      builder: (context, double value, child) {
+        return Opacity(
+          opacity: value,
+          child: Transform.translate(
+            offset: Offset(0, (1 - value) * 5),
+            child: child,
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.primary.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.access_time_rounded, size: 14, color: theme.colorScheme.primary),
+            SizedBox(width: 4),
+            Text(
+              'ETA: ${_calculateETA(stop)} min',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildFavoriteButton(FavoritesController controller, BusStop stop, bool isFav, ThemeData theme) {
     return GestureDetector(
-      onTap: () => _handleFavoriteToggle(controller, stop),
+      onTap: () => _handleFavoriteToggle(controller, stop, isFav),
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
+        duration: Duration(milliseconds: 400),
+        curve: Curves.easeInOutBack,
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: isFav ? theme.colorScheme.error.withOpacity(0.1) : Colors.transparent,
           shape: BoxShape.circle,
         ),
         child: AnimatedSwitcher(
-          duration: Duration(milliseconds: 300),
-          transitionBuilder: (child, animation) => ScaleTransition(
-            scale: animation,
-            child: child,
-          ),
+          duration: Duration(milliseconds: 500),
+          transitionBuilder: (child, animation) {
+            return ScaleTransition(
+              scale: CurvedAnimation(
+                parent: animation,
+                curve: Curves.elasticOut,
+              ),
+              child: RotationTransition(
+                turns: Tween(begin: -0.1, end: 0.0).animate(
+                  CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOutBack,
+                  ),
+                ),
+                child: FadeTransition(
+                  opacity: animation,
+                  child: child,
+                ),
+              ),
+            );
+          },
           child: Icon(
             isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
             key: ValueKey(isFav),
@@ -179,33 +249,43 @@ class StopCard extends StatelessWidget {
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(1.0, 0.0);
           const end = Offset.zero;
-          const curve = Curves.easeInOut;
+          const curve = Curves.easeInOutQuart;
 
-          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var tween = Tween<Offset>(begin: begin, end: end).chain(CurveTween(curve: curve));
           var offsetAnimation = animation.drive(tween);
+
+          var fadeTween = Tween<double>(begin: 0.0, end: 1.0).chain(CurveTween(curve: curve));
+          var fadeAnimation = animation.drive(fadeTween);
 
           return SlideTransition(
             position: offsetAnimation,
-            child: child,
+            child: FadeTransition(
+              opacity: fadeAnimation,
+              child: child,
+            ),
           );
         },
-        transitionDuration: Duration(milliseconds: 400),
+        transitionDuration: Duration(milliseconds: 600),
       ),
     );
   }
 
-  void _handleFavoriteToggle(FavoritesController controller, BusStop stop) {
+  void _handleFavoriteToggle(FavoritesController controller, BusStop stop, bool currentFavoriteStatus) {
+    // Show feedback based on the action we're ABOUT to perform
+    final message = currentFavoriteStatus ? 'Removed from favorites' : 'Added to favorites';
+    final backgroundColor = currentFavoriteStatus ? Colors.grey[700] : Colors.green;
+
+    // Toggle the favorite status
     controller.toggleFavorite(stop.stopname);
 
-    // Show quick feedback snackbar
-    final isNowFavorite = controller.isFavorite(stop.stopname);
+    // Show the snackbar with the correct message
     ScaffoldMessenger.of(Get.context!).showSnackBar(
       SnackBar(
         content: Text(
-          isNowFavorite ? 'Added to favorites' : 'Removed from favorites',
+          message,
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: isNowFavorite ? Colors.green : Colors.grey[700],
+        backgroundColor: backgroundColor,
         duration: Duration(milliseconds: 800),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
