@@ -14,6 +14,7 @@ class StopListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.purple[600],
         title: Text('Bus Stops'),
         actions: [
           IconButton(
