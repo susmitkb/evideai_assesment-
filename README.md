@@ -1,4 +1,4 @@
-📱 App Overview
+📱 App Overview:
 A Flutter application that displays bus stops with real-time ETA information, favorite management, and search functionality. The app loads data from local JSON files and persists user preferences across sessions.
 ✨ Features
 Local JSON Data: Loads bus stop information from assets/mock/stops.json
