@@ -1,16 +1,76 @@
-# teamevideai
+📱 App Overview:
+A Flutter application that displays bus stops with real-time ETA information, favorite management, and search functionality. The app loads data from local JSON files and persists user preferences across sessions.
+✨ Features
+Local JSON Data: Loads bus stop information from assets/mock/stops.json
 
-A new Flutter project.
+Stop List: Displays stop names with short descriptions
 
-## Getting Started
+Detail Screen: Shows complete information including coordinates and ETA
 
-This project is a starting point for a Flutter application.
+Favorite System: Toggle favorites with persistent storage using shared_preferences
 
-A few resources to get you started if this is your first Flutter project:
+Search Functionality: Filter stops by name in real-time
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Smooth Animations: Enhanced UI with engaging animations and transitions
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+🎮 How to Use
+Browse Stops: Scroll through the list of available bus stops
+
+Search: Use the search bar to filter stops by name
+
+View Details: Tap any stop to see detailed information including:
+
+Coordinates (latitude/longitude)
+
+Estimated Time of Arrival (ETA)
+
+Time difference from previous stop
+
+Manage Favorites:
+
+Tap the heart icon to add/remove from favorites
+
+Access favorites from the favorites screen (heart icon in app bar)
+
+Favorites persist between app sessions
+
+Swipe to Remove: In favorites screen, swipe left to remove items
+
+🔧 Technical Details
+Dependencies
+getx: State management and navigation
+
+shared_preferences: Local storage for favorites
+
+Flutter built-in packages for animations and UI
+
+Data Source
+Local JSON file: assets/mock/stops.json
+
+Format: Array of stop objects with name, coordinates, and timing data
+
+State Management
+GetX for reactive state management
+
+Controllers for business logic separation
+
+Observable variables for real-time updates
+
+🎨 UI/UX Features
+Material Design 3 compliant interface
+
+Theming with consistent color scheme
+
+Smooth animations for:
+
+Favorite toggling (scale + rotation)
+
+Page transitions (slide + fade)
+
+List item entrances (staggered)
+
+Loading states
+
+Responsive layout for various screen sizes
+
+Haptic feedback on interactions
