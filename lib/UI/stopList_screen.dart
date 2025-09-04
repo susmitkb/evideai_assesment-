@@ -1,4 +1,3 @@
-// views/stop_list_screen.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:teamevideai/UI/favourites_screen.dart';
@@ -50,7 +49,6 @@ class StopListScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // Search Bar with subtle shadow
           Container(
             decoration: BoxDecoration(
               color: colorScheme.surface,
@@ -65,7 +63,6 @@ class StopListScreen extends StatelessWidget {
             child: SearchBarWidget(),
           ),
 
-          // Status indicator
           Obx(() {
             if (busStopController.isLoading.value) {
               return _buildLoadingState();
@@ -77,7 +74,6 @@ class StopListScreen extends StatelessWidget {
             return SizedBox.shrink();
           }),
 
-          // Results count
           Obx(() {
             if (busStopController.filteredStops.isNotEmpty &&
                 busStopController.searchQuery.value.isNotEmpty) {
@@ -86,7 +82,6 @@ class StopListScreen extends StatelessWidget {
             return SizedBox.shrink();
           }),
 
-          // Stops list
           Expanded(
             child: Obx(() {
               if (busStopController.filteredStops.isNotEmpty) {

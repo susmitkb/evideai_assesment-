@@ -1,4 +1,3 @@
-// services/json_loader_service.dart
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get.dart';
 import 'package:teamevideai/models/busStop_models.dart';
@@ -8,15 +7,12 @@ class JsonLoaderService extends GetxService {
     try {
       print('Loading Dart file from assets...');
 
-      // Load the file as text
       final String fileContent = await rootBundle.loadString('assets/mock/stops.json');
 
-      // Parse the Dart code format
       final Map<String, dynamic> parsedData = _parseDartMapString(fileContent);
 
       print('Dart file parsed successfully. Keys found: ${parsedData.keys.join(', ')}');
 
-      // Extract stops from all routes
       List<BusStop> allStops = [];
 
       if (parsedData.containsKey('tirTOkuttp')) {
@@ -72,10 +68,8 @@ class JsonLoaderService extends GetxService {
 
   Map<String, dynamic> _parseDartMapString(String dartCode) {
     try {
-      // This is a simplified parser that handles your specific Dart format
       final Map<String, dynamic> result = {};
 
-      // Extract each array using regex
       final tirTOkuttpMatch = RegExp(r"tirTOkuttp\s*=\s*\[(.*?)\];", dotAll: true).firstMatch(dartCode);
       final ktklTotirMatch = RegExp(r"ktklTotir\s*=\s*\[(.*?)\];", dotAll: true).firstMatch(dartCode);
       final tirtoktklMatch = RegExp(r"tirtoktkl\s*=\s*\[(.*?)\];", dotAll: true).firstMatch(dartCode);
@@ -102,7 +96,6 @@ class JsonLoaderService extends GetxService {
   List<Map<String, dynamic>> _parseArray(String arrayContent) {
     final List<Map<String, dynamic>> result = [];
 
-    // Split into individual objects
     final objectPattern = RegExp(r"\{(.*?)\}", dotAll: true);
     final matches = objectPattern.allMatches(arrayContent);
 
@@ -110,7 +103,6 @@ class JsonLoaderService extends GetxService {
       final objectContent = match.group(1)!;
       final Map<String, dynamic> objectMap = {};
 
-      // Parse key-value pairs
       final propertyPattern = RegExp(r"'(.*?)'\s*:\s*(.*?)(?=,\s*'|$)", dotAll: true);
       final propertyMatches = propertyPattern.allMatches(objectContent);
 
@@ -118,23 +110,17 @@ class JsonLoaderService extends GetxService {
         final key = propertyMatch.group(1)!;
         var value = propertyMatch.group(2)!.trim();
 
-        // Remove trailing commas
         if (value.endsWith(',')) {
           value = value.substring(0, value.length - 1);
         }
 
-        // Parse the value based on its content
         if (value.startsWith("'") && value.endsWith("'")) {
-          // String value
           objectMap[key] = value.substring(1, value.length - 1);
         } else if (value.contains(RegExp(r'^\d+\.\d+$'))) {
-          // Double value
           objectMap[key] = double.parse(value);
         } else if (value.contains(RegExp(r'^\d+$'))) {
-          // Integer value
           objectMap[key] = int.parse(value);
         } else {
-          // Keep as string (for empty strings, null, etc.)
           objectMap[key] = value;
         }
       }

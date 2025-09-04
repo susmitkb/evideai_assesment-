@@ -1,4 +1,3 @@
-// widgets/stops_card.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:teamevideai/UI/stopDetails_screen.dart';
@@ -7,7 +6,7 @@ import 'package:teamevideai/models/busStop_models.dart';
 
 class StopCard extends StatelessWidget {
   final BusStop stop;
-  final int index; // For staggered animation
+  final int index;
 
   const StopCard({Key? key, required this.stop, this.index = 0}) : super(key: key);
 
@@ -21,7 +20,7 @@ class StopCard extends StatelessWidget {
       final isFav = favoritesController.isFavorite(stop.stopname);
 
       return AnimatedContainer(
-        duration: Duration(milliseconds: 500 + (index * 100)), // Staggered animation
+        duration: Duration(milliseconds: 500 + (index * 100)),
         curve: Curves.easeOutCubic,
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         transform: Matrix4.translationValues(0, 0, 0),
@@ -45,11 +44,8 @@ class StopCard extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Location Icon with subtle pulse animation
                   _buildLocationIcon(theme),
                   SizedBox(width: 16),
-
-                  // Stop Details
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +59,6 @@ class StopCard extends StatelessWidget {
                     ),
                   ),
 
-                  // Favorite Button with enhanced animation
                   _buildFavoriteButton(favoritesController, stop, isFav, theme),
                 ],
               ),
@@ -271,14 +266,11 @@ class StopCard extends StatelessWidget {
   }
 
   void _handleFavoriteToggle(FavoritesController controller, BusStop stop, bool currentFavoriteStatus) {
-    // Show feedback based on the action we're ABOUT to perform
     final message = currentFavoriteStatus ? 'Removed from favorites' : 'Added to favorites';
     final backgroundColor = currentFavoriteStatus ? Colors.grey[700] : Colors.green;
 
-    // Toggle the favorite status
     controller.toggleFavorite(stop.stopname);
 
-    // Show the snackbar with the correct message
     ScaffoldMessenger.of(Get.context!).showSnackBar(
       SnackBar(
         content: Text(

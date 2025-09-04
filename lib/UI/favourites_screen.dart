@@ -1,4 +1,3 @@
-// views/favorites_screen.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:teamevideai/controllers/busStop_controllers.dart';
@@ -35,7 +34,6 @@ class FavoritesScreen extends StatelessWidget {
         ),
       ),
       body: Obx(() {
-        // Get only the favorite stops (reactive)
         final favoriteStops = busStopController.allStops.where((stop) {
           return favoritesController.isFavorite(stop.stopname);
         }).toList();
@@ -88,7 +86,7 @@ class FavoritesScreen extends StatelessWidget {
       itemBuilder: (context, index) {
         final stop = favoriteStops[index];
         return Dismissible(
-          key: Key(stop.stopname), // Unique key for each item
+          key: Key(stop.stopname),
           direction: DismissDirection.endToStart,
           background: Container(
             color: Colors.red,
@@ -101,14 +99,11 @@ class FavoritesScreen extends StatelessWidget {
             ),
           ),
           confirmDismiss: (direction) async {
-            // Show confirmation dialog for swipe to delete
             return await _showDeleteConfirmation(context, stop.stopname);
           },
           onDismissed: (direction) {
-            // Remove from favorites when dismissed
             favoritesController.toggleFavorite(stop.stopname);
 
-            // Show undo snackbar
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Removed from favorites'),

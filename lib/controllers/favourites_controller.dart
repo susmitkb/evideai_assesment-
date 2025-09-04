@@ -1,8 +1,9 @@
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:teamevideai/models/busStop_models.dart';
 
 class FavoritesController extends GetxController {
-  var favoriteStops = <String>[].obs;
+  var favoriteStopIds = <String>[].obs; // Changed to store IDs instead of names
 
   @override
   void onInit() {
@@ -12,23 +13,33 @@ class FavoritesController extends GetxController {
 
   Future<void> loadFavorites() async {
     final prefs = await SharedPreferences.getInstance();
-    final List<String>? favorites = prefs.getStringList('favoriteStops');
+    final List<String>? favorites = prefs.getStringList('favoriteStopIds');
     if (favorites != null) {
-      favoriteStops.assignAll(favorites);
+      favoriteStopIds.assignAll(favorites);
     }
   }
 
-  Future<void> toggleFavorite(String stopName) async {
+  Future<void> toggleFavorite(String stopId) async {
     final prefs = await SharedPreferences.getInstance();
-    if (favoriteStops.contains(stopName)) {
-      favoriteStops.remove(stopName);
+    if (favoriteStopIds.contains(stopId)) {
+      favoriteStopIds.remove(stopId);
     } else {
-      favoriteStops.add(stopName);
+      favoriteStopIds.add(stopId);
     }
-    await prefs.setStringList('favoriteStops', favoriteStops);
+    await prefs.setStringList('favoriteStopIds', favoriteStopIds);
   }
 
-  bool isFavorite(String stopName) {
-    return favoriteStops.contains(stopName);
+  bool isFavorite(String stopId) {
+    return favoriteStopIds.contains(stopId);
+  }
+
+  // Helper method to get favorite status by BusStop object
+  bool isFavoriteStop(BusStop stop) {
+    return isFavorite(stop.id);
+  }
+
+  // Helper method to toggle favorite by BusStop object
+  Future<void> toggleFavoriteStop(BusStop stop) async {
+    await toggleFavorite(stop.id);
   }
 }

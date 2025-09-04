@@ -1,4 +1,3 @@
-// widgets/search_bar.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:teamevideai/controllers/busStop_controllers.dart';

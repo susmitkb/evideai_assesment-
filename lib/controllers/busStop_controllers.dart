@@ -27,8 +27,6 @@ class BusStopController extends GetxController {
     _debounce?.cancel();
     super.onClose();
   }
-
-  // Backward-compatible alias for older UI calls
   Future<void> fetchStops() => refreshStops();
 
   Future<void> refreshStops() async {
@@ -97,7 +95,6 @@ class BusStopController extends GetxController {
         list.sort((a, b) => b.stopname.toLowerCase().compareTo(a.stopname.toLowerCase()));
         break;
       case SortMode.distanceAsc:
-      // Future: requires location; keep order for now
         break;
     }
     return list;
